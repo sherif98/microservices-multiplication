@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/results")
 public class MultiplicationResultAttemptController {
@@ -22,14 +24,17 @@ public class MultiplicationResultAttemptController {
 
 
     @RequestMapping(method = RequestMethod.POST)
-    ResultResponse postResult(@RequestBody MultiplicationResultAttempt multiplicationResultAttempt) {
-        return new ResultResponse(multiplicationService.checkAttempt(multiplicationResultAttempt));
+    MultiplicationResultAttempt postResult(@RequestBody MultiplicationResultAttempt multiplicationResultAttempt) {
+        boolean result = multiplicationService.checkAttempt(multiplicationResultAttempt);
+        return new MultiplicationResultAttempt(multiplicationResultAttempt.getUser(),
+                multiplicationResultAttempt.getMultiplication(),
+                multiplicationResultAttempt.getResultAttempt(),
+                result);
     }
 
-    @RequiredArgsConstructor
-    @NoArgsConstructor(force = true)
-    @Getter
-    private static final class ResultResponse {
-        private final boolean correct;
+    @GetMapping
+    List<MultiplicationResultAttempt> getStatistics(@RequestParam("alias") String alias) {
+        return multiplicationService.getStatsForUser(alias);
     }
+
 }
