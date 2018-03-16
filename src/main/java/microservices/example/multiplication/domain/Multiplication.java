@@ -1,10 +1,12 @@
 package microservices.example.multiplication.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
 @ToString
+@NoArgsConstructor
 public class Multiplication {
 
     private int factorA;
